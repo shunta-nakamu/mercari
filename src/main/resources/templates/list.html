@@ -1,0 +1,405 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- css -->
+<link rel="stylesheet" th:href="@{/css/modaal.css}" />
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet"
+	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+	crossorigin="anonymous" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	crossorigin="anonymous" />
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<!-- script -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+	<script th:src="@{/js/modaal.min.js}"></script>
+	<script th:src="@{/js/main.js}"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	crossorigin="anonymous"></script>
+<!-- 
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+
+<script type="text/javascript"
+	src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script> -->
+
+
+<script type="text/javascript">
+	var table = '';
+	var page = {
+		status : 1
+	};
+
+	$(document)
+			.ready(
+					function() {
+
+						if (page.status == 1) {
+							$('#prev').hide();
+							$('#prev2').hide();
+						}
+						// Ajax通信テスト ボタンクリック
+						// outputDataを空に初期化
+						$("#output_data").text("");
+						$.ajax({
+							type : "GET",
+							url : "/mercari/getJason",
+							data : page,
+							dataType : "json",
+							success : function(data) {
+								console.log(data);
+								success(data);
+							},
+							error : function(XMLHttpRequest, textStatus,
+									errorThrown) {
+								error(XMLHttpRequest, textStatus, errorThrown);
+							}
+						});
+
+						// Ajax通信テスト ボタンクリック
+						$("#next").click(
+								function() {
+									page.status++;
+									if (page.status !== 1) {
+										$('#prev').show();
+										$('#prev2').show();
+									}
+									// outputDataを空に初期化
+									$("#output_data").text("");
+									$.ajax({
+										type : "GET",
+										url : "/mercari/getJason",
+										data : page,
+										dataType : "json",
+										success : function(data) {
+											console.log(data);
+											success(data);
+										},
+										error : function(XMLHttpRequest,
+												textStatus, errorThrown) {
+											error(XMLHttpRequest, textStatus,
+													errorThrown);
+										}
+									});
+								});
+						// Ajax通信テスト ボタンクリック
+						$("#next2").click(
+								function() {
+									page.status++;
+									if (page.status !== 1) {
+										$('#prev').show();
+										$('#prev2').show();
+									}
+									// outputDataを空に初期化
+									$("#output_data").text("");
+									$.ajax({
+										type : "GET",
+										url : "/mercari/getJason",
+										data : page,
+										dataType : "json",
+										success : function(data) {
+											console.log(data);
+											success(data);
+										},
+										error : function(XMLHttpRequest,
+												textStatus, errorThrown) {
+											error(XMLHttpRequest, textStatus,
+													errorThrown);
+										}
+									});
+								});
+
+						// Ajax通信テスト ボタンクリック
+						$("#prev").click(
+								function() {
+									page.status--;
+									if (page.status == 1) {
+										$('#prev').hide();
+										$('#prev2').hide();
+									}
+									// outputDataを空に初期化
+									$("#output_data").text("");
+									$.ajax({
+										type : "GET",
+										url : "/mercari/getJason",
+										data : page,
+										dataType : "json",
+										success : function(data) {
+											console.log(data);
+											success(data);
+										},
+										error : function(XMLHttpRequest,
+												textStatus, errorThrown) {
+											error(XMLHttpRequest, textStatus,
+													errorThrown);
+										}
+									});
+								});
+
+						// Ajax通信テスト ボタンクリック
+						$("#prev2").click(
+								function() {
+									page.status--;
+									if (page.status == 1) {
+										$(this).hide();
+										$('#prev').hide();
+									}
+									// outputDataを空に初期化
+									$("#output_data").text("");
+									$.ajax({
+										type : "GET",
+										url : "/mercari/getJason",
+										data : page,
+										dataType : "json",
+										success : function(data) {
+											success(data);
+										},
+										error : function(XMLHttpRequest,
+												textStatus, errorThrown) {
+											error(XMLHttpRequest, textStatus,
+													errorThrown);
+										}
+									});
+								});
+						// Ajax通信成功時処理
+						function success(data) {
+							$("#output_data").text("");//初期化
+							$("#output_data")
+									.append(
+											"<tr><th>name</th><th>price</th><th>category</th><th>brand</th><th>condition</th></tr>")
+							for (var cnt = 0; cnt < data.length; cnt++) {
+								$("#output_data")
+										.append(
+												"<tr><td class='item-name'>"
+														+ "<a href='http://localhost:8080/mercari/viewDetail?id="
+														+ data[cnt].id
+														+ "'>"
+														+ data[cnt].name
+														+ "</a>"
+														+ "</td>"
+														+ "<td class='item-name'>"
+														+ data[cnt].price
+														+ "</td>"
+														+ "<td class='item-name'>"
+														+ "<a href='http://localhost:8080/mercari/viewDetail?id="
+														+ data[cnt].id
+														+ "'>"
+														+ data[cnt].name_parent
+														+ "</a>"
+														+ "/"
+														+ "<a href='#'>"
+														+ data[cnt].name_child
+														+ "</a>"
+														+ "/"
+														+ "<a href='#'>"
+														+ data[cnt].name_grand_child
+														+ "</a>"
+														+ "</td>"
+														+ "<td class='item-name'>"
+														+ data[cnt].brand
+														+ "</td>"
+														+ "<td class='item-name'>"
+														+ data[cnt].condition
+														+ "</td></tr>");
+							}
+						}
+						// Ajax通信失敗時処理
+						function error(XMLHttpRequest, textStatus, errorThrown) {
+							alert("error:" + XMLHttpRequest);
+							alert("status:" + textStatus);
+							alert("errorThrown:" + errorThrown);
+						}
+
+						$("#search").click(
+								function() {
+									var name = $("#name").val();
+									var brand = $("#brand").val();
+									var parent = $('#parent').val();
+									var child = $('#child').val();
+									var grandChild = $('#grandChild').val();
+									console.log("search1")
+									$("#output_data").text("");
+									$.ajax({
+										type : "GET",
+										url : "/mercari/getSearchData",
+										data : {
+											name : name,
+											brand : brand,
+											parent : parent,
+											child : child,
+											grandChild : grandChild,
+											page : page
+										},
+										dataType : "json",
+										success : function(data) {
+											console.log('suc');
+											success(data);
+										},
+										error : function(XMLHttpRequest,
+												textStatus, errorThrown) {
+											console.log('error');
+											error(XMLHttpRequest, textStatus,
+													errorThrown);
+										}
+									});
+								});
+					});
+</script>
+
+<title>Insert title here</title>
+</head>
+<body>
+	<span id="page"></span>
+	<nav class="navbar navbar-inverse">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed"
+			data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+			aria-controls="navbar">
+			<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+				class="icon-bar"></span>
+		</button>
+
+		<a class="navbar-brand"
+			href="${pageContext.request.contextPath}/mercari/viewAll"
+			onmouseover="popup()">Rakus Items</a>
+
+	</div>
+	<div id="navbar" class="collapse navbar-collapse">
+		<div>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a id="logout" href="./login.html">Logout <i
+						class="fa fa-power-off"></i></a></li>
+				<li><a href="#modal" class="modal">Register User</a>
+					<div id="modal" style="display: none;">
+						<div id="register">
+							<h1>Register User</h1>
+							<form method="post" th:action="@{./sampl}" th:object="${userForm}">
+								<table>
+									<tr>
+										<td><label>email：</label></td>
+										<td> <input type="text" th:field="*{email}"></td>
+									</tr>
+									<tr>
+										<td><label>password：</label></td>
+										<td><input type="password" th:field="*{password}"></td>
+									</tr>
+								</table>
+									<input type="submit" value="登録">
+							</form>
+						</div>
+
+						<!-- <input type="text" th:field="*{email}">
+			<input type="text" th:field="*{password}"> -->
+					</div></li>
+			</ul>
+			<p class="navbar-text navbar-right">
+				<span id="loginName">user: userName</span>
+			</p>
+		</div>
+	</div>
+	</nav>
+
+	<div class="container-fluid">
+		<!-- addItem link -->
+
+		<div id="addItemButton">
+			<a class="btn btn-default" th:href="@{./viewAddPage}"><i
+				class="fa fa-plus-square-o"></i> Add New Item</a>
+		</div>
+
+	</div>
+
+
+
+	<!-- 検索フォーム -->
+	<div id="forms">
+		<form action="" class="form-inline" role="form">
+			<div class="form-group">
+				<input type="input" class="form-control" id="name"
+					placeholder="item name" />
+			</div>
+			<select class="form-control" id="parent">
+
+				<option th:each="parent : ${parentList}" th:value="${parent.parent}">[[${parent.parent}]]</option>
+			</select> <select class="form-control" id="child">
+				<option th:each="child : ${childList}" th:value="${child.child}">[[${child.child}]]</option>
+			</select> <select class="form-control" id="grandChild">
+				<option th:each="grand_child : ${grandChildList}"
+					th:value="${grand_child.grandChild}">[[${grand_child.grandChild}]]</option>
+			</select>
+			<div class="form-group">
+				<i class="fa fa-plus"></i>
+			</div>
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="brand"
+					id="brand" />
+			</div>
+			<div class="form-group"></div>
+			<button class="btn btn-default" id="search">
+				<i class="fa fa-angle-double-right"></i> search
+			</button>
+		</form>
+
+	</div>
+
+	<!-- pagination -->
+	<div class="pages">
+
+		<nav class="page-nav">
+		<ul class="pager">
+			<li class="previous"><a href="#" id="prev">&larr; prev</a></li>
+			<li class="next"><a href="#" id="next">next &rarr;</a></li>
+		</ul>
+		</nav>
+	</div>
+
+	<!-- table -->
+	<div class="table-responsive">
+		<table class="table table-hover table-condensed" id="output_data">
+			<thead>
+
+			</thead>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- pagination -->
+
+	<div class="pages">
+		<nav class="page-nav">
+		<ul class="pager">
+			<li class="previous"><a href="#" id="prev2">&larr; prev</a></li>
+			<li class="next"><a href="#" id="next2">next &rarr;</a></li>
+		</ul>
+		</nav>
+		<!-- ページ番号を指定して表示するフォーム -->
+		<div id="select-page">
+			<form class="form-inline">
+				<div class="form-group">
+					<div class="input-group col-xs-6">
+						<label></label> <input type="text" class="form-control" />
+						<!-- 総ページ数 -->
+						<div class="input-group-addon">/ 20</div>
+					</div>
+					<div class="input-group col-xs-1">
+						<button type="submit" class="btn btn-default">Go</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</body>
+</html>
+

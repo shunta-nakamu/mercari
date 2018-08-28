@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+	<section>
+		<h2>属性値の変更</h2>
+		<a href="./member/ダミー.html"
+			th:href="@{/members/{memberId}(memberId=${member.id})}">メンバーページへのリンク</a>
+		<a href="./member/ダミー.html"
+			th:attr="href=@{/members/{memberId}(memberId=${member.id})}, src=@{test.css}">メンバーページへのリンク</a>
+		<a class="member-link" href="./member/ダミー.html"
+			th:classappend="${member.id == 1} ? admin">メンバーページへのリンク</a>
+	</section>
+
+	<p th:text="|one two three = ${member.id}|"></p>
+
+	<section>
+		<h2>繰り返し</h2>
+		<ul>
+			<li th:each="member : ${members}" th:text="${member.name}"></li>
+		</ul>
+		<ul>
+			<li th:each="member,iterStat : ${members}"
+				th:text="${iterStat.count} + '番:' + ${member.name}"></li>
+		</ul>
+	</section>
+
+	<section>
+		<h2>if文</h2>
+		<p th:if="${member.id == 1}">あなたは管理者です。</p>
+		<p th:if="${null}">nullなのでこのタグが出力されない。</p>
+		<p th:if="123">0以外の数値なので出力される。</p>
+	</section>
+
+	<section>
+		<h2>&lt;th:block&gt;タグ</h2>
+		<ul>
+			<th:block th:each="member : ${members}">
+				<li th:text="'ID:' + ${member.id}"></li>
+				<li th:text="'名前:' + ${member.name}"></li>
+			</th:block>
+		</ul>
+	</section>
+
+	<section>
+		<h2>ローカル変数</h2>
+		<th:block th:with="ichiro=${member}">
+			<div th:if="${ichiro.name!=''}">
+				<p th:text="'君の名は '+ ${ichiro.name}">ここが書き換わるはず！</p>
+			</div>
+		</th:block>
+	</section>
+	<section>
+		<h2>三項演算子</h2>
+		<p th:text="${isEven} ? ${even} : ${odd}"></p>
+	</section>
+	<div th:if="${isEven}">
+		<input type="text" />
+	</div>
+
+	<div th:switch="${month}">
+		<p th:case="1" th:text="|${month}月|"></p>
+		<p th:case="2" th:text="|${month}月|"></p>
+		<p th:case="3" th:text="|${month}月|"></p>
+		<p th:case="*">対象なし</p>
+	</div>
+
+	<div th:each="member, stat : ${memberList}" th:object="${member}">
+		<div>
+			<span th:text="*{id}"></span><span th:text="*{name}"></span><span th:text="${stat.index}"></span>
+		</div>
+	</div>
+</body>
+</html>

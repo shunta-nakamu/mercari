@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+body{
+	font-size: 16px;
+}
+
+#main{
+	width: 300px;
+	margin: auto;
+}
+
+#main h1{
+	padding-bottom: 5px;
+	border-bottom: 1px solid blue;
+}
+
+#main form{
+	margin :auto;
+	
+}
+
+#register{
+	width: 300px;
+	margin: auto;
+}
+
+#register h1 {
+	font-size: 20px;
+	border-bottom: 1px solid blue;
+}
